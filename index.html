@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Bé Thư của anh 💕</title>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Nunito:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Floating hearts background -->
+<div class="hearts-bg" id="hearts-bg"></div>
+
+<!-- LOCK SCREEN -->
+<div id="lock-screen">
+  <div class="lock-card">
+    <label>Enter the secret code 🔒</label>
+    <input type="password" id="code-input" placeholder="••••" maxlength="20" autocomplete="off">
+    <button class="btn-enter" onclick="checkCode()">Enter 💕</button>
+    <p class="hint">Hint: the code is <strong>Our Anniversary</strong> 🌸</p>
+  </div>
+</div>
+
+<!-- WELCOME SCREEN -->
+<div id="welcome-screen">
+  <p class="welcome-text" id="welcome-text">Welcome my love,<br>enjoy my small gift for you 🌸</p>
+</div>
+
+<!-- VIDEO LIGHTBOX -->
+<div id="video-lightbox" onclick="closeVideoLightbox(event)">
+  <button class="close-lb" onclick="closeVideoLightbox()">✕</button>
+  <video id="lightbox-video" controls playsinline></video>
+</div>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" onclick="closeLightbox()">
+  <button class="close-lb" onclick="closeLightbox()">✕</button>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<!-- MUSIC PLAYER NỀN (cố định góc dưới phải) -->
+<div id="music-player">
+  <!-- YouTube iframe ẩn dùng để phát nhạc nền -->
+  <div id="yt-bg" style="display:none">
+    <div id="yt-bg-player"></div>
+  </div>
+
+  <div id="music-bar">
+    <button id="music-toggle" onclick="toggleMusic()" title="Play/Pause">▶</button>
+    <div id="music-info">
+      <span id="music-song-name">Chọn bài nhạc</span>
+      <span id="music-song-artist"></span>
+    </div>
+    <button id="music-list-btn" onclick="togglePlaylist()" title="Danh sách">🎵</button>
+  </div>
+
+  <div id="playlist" class="hidden">
+    <p class="playlist-title">🎶 Chọn nhạc nền</p>
+    <div class="playlist-item" data-video="oOICJ-1FXfQ" onclick="selectSong(this,'Hiwaga','Tatin DC')">
+      <span>Hiwaga</span><small>Tatin DC</small>
+    </div>
+    <div class="playlist-item" data-video="3MteSlpxCpo" onclick="selectSong(this,'Wish','T6')">
+      <span>Wish</span><small>T6</small>
+    </div>
+    <div class="playlist-item" data-video="cwQgjq0mCdE" onclick="selectSong(this,'Lover','Taylor Swift')">
+      <span>Lover</span><small>Taylor Swift</small>
+    </div>
+    <div class="playlist-item" data-video="2Vv-BfVoq4g" onclick="selectSong(this,'Perfect','Ed Sheeran')">
+      <span>Perfect</span><small>Ed Sheeran</small>
+    </div>
+    <div class="playlist-item" data-video="450p7goxZqg" onclick="selectSong(this,'All of Me','John Legend')">
+      <span>All of Me</span><small>John Legend</small>
+    </div>
+    <p class="playlist-hint">💡 Đổi data-video bằng ID YouTube của bài bạn thích</p>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app">
+  <nav>
+    <span class="nav-title">💕 For You</span>
+    <span class="nav-hearts">♥</span>
+    <button class="tab-btn active" onclick="showTab('letter', this)">❤️ Love Letter</button>
+    <button class="tab-btn" onclick="showTab('gallery', this)">🌹 Gallery</button>
+    <span class="nav-hearts">♥</span>
+  </nav>
+
+  <!-- LOVE LETTER -->
+  <div class="section active" id="tab-letter">
+    <div class="letter-wrapper">
+      <button class="open-envelope-btn" id="envelope-btn" onclick="toggleLetter()">💌 Click to open</button>
+      <p class="letter-to">Gửi bé Thư,</p>
+      <p class="letter-subtitle">Một chiếc thư nhỏ dành cho Bé Thư của anh</p>
+      <div class="letter-body" id="letter-content" style="display:none">
+        <p>Vậy là tròn 2 năm mình ở bên nhau rồi đó cục cưng. Anh thật sự thấy rất vui, rất hạnh phúc vì được đồng hành cùng em - bé Thư yêu của anh.</p>
+        <br>
+        <p>Hai năm không phải là khoảng thời gian quá dài, nhưng đủ để anh biết được rằng gặp được em là sự may mắn của anh. Cảm ơn em vì đã đến bên anh, ở cạnh anh, yêu anh, cho phép anh được yêu em, cùng anh trải qua biết bao niềm vui, những lần giận dỗi, những lúc mệt mỏi và những khoảnh khắc hạnh phúc nhất. Nhờ có bé, cuộc sống của anh trở nên vui vẻ, ấm áp hơn và ý nghĩa hơn rất nhiều.</p>
+        <br>
+        <p>Anh biết đôi khi anh còn vụng về, còn làm em buồn, nhưng anh luôn thật lòng yêu em và luôn muốn học cách yêu em tốt hơn mỗi ngày. Cảm ơn em vì đã luôn dịu dàng, quan tâm, nhắc nhở và yêu thương anh theo cách rất riêng của em.</p>
+        <br>
+        <p>Chúc mừng kỉ niệm 2 yêu nhau của mình nhé cục cưng. Anh mong rằng mình sẽ còn cùng nhau trải qua nhiều cột mốc, nhiều kỉ niệm nữa, vẫn nắm tay nhau, yêu thương nhau và ở bên nhau thật lâu nhé em bé của anh.</p>
+        <br>
+        <p>Anh yêu em rất nhiều ❤️</p>
+        <div class="letter-sign">Cục đất của em,<br>Bé Khuê </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GALLERY -->
+  <div class="section" id="tab-gallery">
+    <div class="gallery-topbar">
+      <p class="gallery-header">🌹 Our Memories</p>
+      <div class="grid-toggle">
+        <button class="grid-btn" onclick="setGrid(1)" title="2 cột">⠒</button>
+        <button class="grid-btn active" onclick="setGrid(2)" title="4 cột">⠶</button>
+        <button class="grid-btn" onclick="setGrid(3)" title="6 cột">⠿</button>
+      </div>
+    </div>
+    <div class="gallery-picture grid-2" id="gallery-picture"></div>
+
+    <div class="gallery-video grid-2" id="gallery-video"></div>
+  </div>
+
+  <footer>made with ♥ just for you</footer>
+</div>
+
+<script src="https://www.youtube.com/iframe_api"></script>
+<script src="script.js"></script>
+</body>
+</html>
