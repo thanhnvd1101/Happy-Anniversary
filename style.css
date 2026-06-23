@@ -434,7 +434,7 @@ nav {
   object-fit: cover;
   display: block;
 }
-/* fallback nếu không có thumb: dùng video làm thumbnail */
+
 .video-thumb-video {
   width: 100%;
   height: 100%;

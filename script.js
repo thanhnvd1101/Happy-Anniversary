@@ -144,62 +144,85 @@ function setGrid(cols) {
 }
 
 // ── MUSIC PLAYER (dùng iframe embed thay vì IFrame API) ──
-let bgPlaying = false;
-let currentVideoId = null;
+const PLAYLIST = [
+  { file: 'media/NightCity.mp3', name: 'Night City', artist: 'Obito (ft. Vstra)' },
+  { file: 'media/Baby.mp3', name: 'Baby', artist: 'MCK (ft. Marzuz)' },
+  { file: 'media/NgoaiLeCuaNhau.mp3', name: 'Ngoại lệ của nhau', artist: 'Obito' },
+  { file: 'media/DoiMatKeTinhSi.mp3', name: 'Đôi mắt kẻ tình si', artist: 'Grey D (ft. Min)' },
+  { file: 'media/NoiNayCoAnh.mp3', name: 'Nơi này có anh', artist: 'Sơn Tùng M-TP' },
+];
 
-function buildIframe(videoId, autoplay) {
-  const container = document.getElementById('yt-bg');
-  const old = container.querySelector('iframe');
-  if (old) { old.src = ''; old.remove(); }
-  container.innerHTML = '';
-  setTimeout(() => {
-    const iframe = document.createElement('iframe');
-    iframe.width = '1';
-    iframe.height = '1';
-    iframe.style.position = 'absolute';
-    iframe.style.opacity = '0';
-    iframe.style.pointerEvents = 'none';
-    iframe.allow = 'autoplay; encrypted-media';
-    iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=${autoplay ? 1 : 0}&loop=1&playlist=${videoId}&controls=0&rel=0&enablejsapi=0`;
-    container.appendChild(iframe);
-  }, 150);
-}
+const audio = new Audio();
+audio.loop = true;
+let currentIdx = -1;
+let isPlaying = false;
 
-function selectSong(el, name, artist) {
-  const videoId = el.getAttribute('data-video');
-  currentVideoId = videoId;
+// Build playlist UI
+const playlistEl = document.getElementById('playlist');
+// Xoá các playlist-item cũ trong HTML (nếu có)
+playlistEl.querySelectorAll('.playlist-item').forEach(el => el.remove());
 
-  document.getElementById('music-song-name').textContent = name;
-  document.getElementById('music-song-artist').textContent = artist;
-  document.querySelectorAll('.playlist-item').forEach(i => i.classList.remove('active'));
-  el.classList.add('active');
+PLAYLIST.forEach((song, idx) => {
+  const div = document.createElement('div');
+  div.className = 'playlist-item';
+  div.innerHTML = `<span>${song.name}</span><small>${song.artist}</small>`;
+  div.onclick = () => selectSong(idx);
+  playlistEl.appendChild(div);
+});
 
-  buildIframe(videoId, true);
-  bgPlaying = true;
-  document.getElementById('music-toggle').textContent = '⏸';
-  document.getElementById('music-toggle').classList.add('playing');
+function selectSong(idx) {
+  currentIdx = idx;
+  const song = PLAYLIST[idx];
 
+  audio.src = song.file;
+  audio.load();
+  audio.play().catch(() => {});
+
+  document.getElementById('music-song-name').textContent = song.name;
+  document.getElementById('music-song-artist').textContent = song.artist;
+
+  document.querySelectorAll('.playlist-item').forEach((el, i) => {
+    el.classList.toggle('active', i === idx);
+  });
+
+  isPlaying = true;
+  updateToggleBtn();
   togglePlaylist(false);
 }
 
 function toggleMusic() {
-  if (!currentVideoId) { togglePlaylist(true); return; }
-
-  if (bgPlaying) {
-    // Dừng: xoá iframe
-    document.getElementById('yt-bg').innerHTML = '';
-    bgPlaying = false;
-    document.getElementById('music-toggle').textContent = '▶';
-    document.getElementById('music-toggle').classList.remove('playing');
+  if (currentIdx === -1) {
+    // Chưa chọn bài → mở playlist
+    togglePlaylist(true);
+    return;
+  }
+  if (isPlaying) {
+    audio.pause();
+    isPlaying = false;
   } else {
-    // Tiếp tục: build lại iframe
-    buildIframe(currentVideoId, true);
-    bgPlaying = true;
-    document.getElementById('music-toggle').textContent = '⏸';
-    document.getElementById('music-toggle').classList.add('playing');
+    audio.play().catch(() => {});
+    isPlaying = true;
+  }
+  updateToggleBtn();
+}
+
+function updateToggleBtn() {
+  const btn = document.getElementById('music-toggle');
+  if (isPlaying) {
+    btn.textContent = '⏸';
+    btn.classList.add('playing');
+  } else {
+    btn.textContent = '▶';
+    btn.classList.remove('playing');
   }
 }
 
+audio.addEventListener('ended', () => {
+  // Chuyển bài tiếp theo
+  const next = (currentIdx + 1) % PLAYLIST.length;
+  selectSong(next);
+});
+ 
 let playlistOpen = false;
 function togglePlaylist(force) {
   const pl = document.getElementById('playlist');
